@@ -87,7 +87,6 @@ def part_1(grid, interestedIndividuals):
         else:
             break
 
-    energy = 0
     part4_ans = 0
     
     for row in range(nRows):
@@ -138,6 +137,7 @@ def part4(grid):
 
             infected_a =  (grid[row][col] == INFECTED)
             shortest = nCols + nRows
+            
             for i in range(nRows):
                 for j in range(nCols):
                     if (row == i and col == j) or grid[i][j] == VACANT or grid[i][j] == VACCINATED :
@@ -153,8 +153,8 @@ def part4(grid):
                                 dic[i*(nCols)+j]])
 
                     if grid[i][j] == INFECTED:
-                        shortest = min(shortest, manhattanDist([row, col], [i, j]))
-                        
+                        shortest = min(shortest, manhattanDist([row, col], [i, j]))                       
+            
             edges.append(
                 [shortest, 0, dic[row*(nCols)+ col]])
 
@@ -168,7 +168,7 @@ def part4(grid):
             n -= 1
         if n == 1: 
             break  # a bit optimize when we found enough n-1 edges!
-    return ans  
+    return -1  
 
 
 def part_3(grid, interestedIndividuals):
@@ -190,7 +190,6 @@ def part_3(grid, interestedIndividuals):
         while infected_q:
             [row, col] = infected_q.popleft()
             grid[row][col] = INFECTED
-
 
             
             if row - 1 >= 0 and check_infectable(grid, row - 1, col):
