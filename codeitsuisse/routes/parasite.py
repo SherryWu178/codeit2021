@@ -31,7 +31,7 @@ def evaluate_parasite():
         room_ans["room"] = room_index
         room_ans["p1"] = a
         room_ans["p2"] = b
-        room_ans["p3"] = part_3(grid, interestedIndividuals)
+        room_ans["p3"] = part_3(grid)
         room_ans["p4"] = part4
         ans.append(room_ans) 
     
@@ -55,9 +55,8 @@ def part_1(grid, interestedIndividuals):
         for col in range(nCols):
             if grid[row][col] == INFECTED:
                 infected_q.append([row, col])
-                key = str(row) + "," + str(col)
-                if key in infected_time:
-                    infected_time[key] = round
+                break
+
 
     while True:
         frontier = deque()
@@ -160,18 +159,21 @@ def part4(grid):
 
 
     edges.sort()  # Sort increasing order by dist
+    print("edges are   ")
+    print(edges)
     uf = UnionFind(n)
     ans = 0
     for d, u, v in edges:
         if uf.union(u, v):
+            print(d)
             ans += d
             n -= 1
         if n == 1: 
             break  # a bit optimize when we found enough n-1 edges!
-    return -1  
+    return ans
 
 
-def part_3(grid, interestedIndividuals):
+def part_3(grid):
     grid = [x[:] for x in grid]
     nRows = len(grid)
     nCols = len(grid[0])
@@ -183,6 +185,7 @@ def part_3(grid, interestedIndividuals):
         for col in range(nCols):
             if grid[row][col] == INFECTED:
                 infected_q.append([row, col])
+                break
 
     while True:
         frontier = deque()
@@ -191,7 +194,6 @@ def part_3(grid, interestedIndividuals):
             [row, col] = infected_q.popleft()
             grid[row][col] = INFECTED
 
-            
             if row - 1 >= 0 and check_infectable(grid, row - 1, col):
                 grid[row - 1][col] = INFECTED
                 frontier.append([row - 1, col])
@@ -238,54 +240,3 @@ def part_3(grid, interestedIndividuals):
                 break
     
     return round
-
-        
-    # for row in range(nRows):
-    #     for col in range(nCols):
-    #         if grid[row][col] == HEALTHY:
-    #             round = -1
-    #             break
-    
-    return energy
-
-
-[
-  {
-    "room": 1,
-    "grid": [
-      [0, 3],
-      [0, 1]
-    ],
-    "interestedIndividuals": [
-      "0,0"
-    ]
-  },
-  {
-    "room": 2,
-    "grid": [
-      [0, 3, 2],
-      [0, 1, 1],
-      [1, 0, 0]
-    ],
-    "interestedIndividuals": [
-      "0,2", "2,0", "1,2"
-    ]
-  }
-]
-
-[
-  {
-    "room": 1,
-    "p1": { "0,0": -1},
-    "p2": 1,
-    "p3": 1,
-    "p4": 0
-  },
-  {
-    "room": 2,
-    "p1": { "0,2":  -1, "2,0":  -1, "1,2":  2},
-    "p2": -1,
-    "p3": 2,
-    "p4": 1
-  }
-]
