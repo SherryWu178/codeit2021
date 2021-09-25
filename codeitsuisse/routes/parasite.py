@@ -123,53 +123,51 @@ def part4(grid):
     grid = [x[:] for x in grid]
     nRows = len(grid)
     nCols = len(grid[0])
-    print(grid)
-    edges = []
-    n = 0
+    edges = []  
     dic = {}
+    DEFAULT = 0
+    n = 1
     for row in range(nRows):
         for col in range(nCols):
-            if grid[row][col] == VACANT or grid[row][col] == VACCINATED :
+            if grid[row][col] == VACANT or grid[row][col] == VACCINATED or grid[row][col] == INFECTED:
                 continue
+
             if row*(nCols)+ col not in dic:
                 dic[row*(nCols)+ col] = n
                 n += 1
 
             infected_a =  (grid[row][col] == INFECTED)
-            
+            shortest = nCols + nRows
             for i in range(nRows):
                 for j in range(nCols):
                     if (row == i and col == j) or grid[i][j] == VACANT or grid[i][j] == VACCINATED :
                         continue
-                    else:
+                    if grid[i][j] == HEALTHY:
                         if (i*(nCols)+j) not in dic:
                             dic[i*(nCols)+j] = n
                             n += 1
-                        infected_b =  (grid[i][j] == INFECTED)
-                        if infected_a and infected_b:
-                            if dic[i*(nCols)+j] > dic[row*(nCols)+ col]:
-                                edges.append([0, dic[row*(nCols)+ col], dic[i*(nCols)+j]])
-                        else:
-                            if dic[i*(nCols)+j] > dic[row*(nCols)+ col]:
-                                edges.append(
-                                    [manhattanDist([row, col], [i, j]), 
-                                    dic[row*(nCols)+ col], 
-                                    dic[i*(nCols)+j]])
-    
+                        if dic[i*(nCols)+j] > dic[row*(nCols)+ col]:                 
+                            edges.append(
+                                [manhattanDist([row, col], [i, j]), 
+                                dic[row*(nCols)+ col], 
+                                dic[i*(nCols)+j]])
+
+                    if grid[i][j] == INFECTED:
+                        shortest = min(shortest, manhattanDist([row, col], [i, j]))
+                        
+            edges.append(
+                [shortest, 0, dic[row*(nCols)+ col]])
+
 
     edges.sort()  # Sort increasing order by dist
-    print("edges: ", edges)
     uf = UnionFind(n)
     ans = 0
     for d, u, v in edges:
         if uf.union(u, v):
-            print(u,v)
-            print(d)
             ans += d
             n -= 1
         if n == 1: 
             break  # a bit optimize when we found enough n-1 edges!
-    print(ans)
     return ans  
 
 
