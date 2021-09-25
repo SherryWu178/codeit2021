@@ -28,7 +28,7 @@ def evaluate_parasite():
         interestedIndividuals = room_data["interestedIndividuals"]
         
         a, b = part_1(grid, interestedIndividuals)
-        room_ans["room"] = i
+        room_ans["room"] = room_index
         room_ans["p1"] = a
         room_ans["p2"] = b
         room_ans["p3"] = part_3(grid, interestedIndividuals)
