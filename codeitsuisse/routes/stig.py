@@ -118,9 +118,15 @@ def evaluate_stig():
                     print("b ", b)
                 else:
                     continue
+
+                if a == []:
+                    a.pop(i)
+                else:
+                    database[i] = a
+                    
+                if b:
+                    database.append(b)
                 
-                database[i] = a
-                database.append(b)
                 print(database)
         database = list(filter(lambda a: a != [], database))
         length = len(database)
