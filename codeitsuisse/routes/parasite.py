@@ -27,7 +27,6 @@ def evaluate_parasite():
         grid = room_data["grid"]
         interestedIndividuals = room_data["interestedIndividuals"]
         
-
         a, b = part_1(grid, interestedIndividuals)
         room_ans["room"] = i
         room_ans["p1"] = a
@@ -51,7 +50,7 @@ def need_energy(grid, row, col):
 
 def part_1(grid, interestedIndividuals):
     infected_time = dict.fromkeys(interestedIndividuals, -1)
-    grid = copy.deepcopy(grid)
+    grid = [x[:] for x in grid]
     nRows = len(grid)
     nCols = len(grid[0])
 
@@ -62,46 +61,50 @@ def part_1(grid, interestedIndividuals):
         for col in range(nCols):
             if grid[row][col] == INFECTED:
                 infected_q.append([row, col])
-                if [row, col] in interestedIndividuals:
-                    index = interestedIndividuals.index([row, col] )
-                    infected_time[index] = 0
+                key = str(row) + "," + str(col)
+                if key in infected_time:
+                    infected_time[key] = round
 
-    
     while True:
-        frontier = []
+        frontier = deque()
+        print("part 1 round ", round)
+        print("queue", infected_q)
         while infected_q:
             [row, col] = infected_q.popleft()
-            grid[row][col] = INFECTED
             
             key = str(row) + "," + str(col)
             if key in infected_time:
                 infected_time[key] = round
 
             if row - 1 >= 0 and check_infectable(grid, row - 1, col):
+                grid[row - 1][col] = INFECTED
                 frontier.append([row - 1, col])
             if row + 1 < nRows and check_infectable(grid, row + 1, col):
+                grid[row + 1][col] = INFECTED
                 frontier.append([row + 1, col])
             if col - 1 >= 0 and check_infectable(grid, row, col - 1):
+                grid[row][col - 1] = INFECTED
                 frontier.append([row, col - 1])
             if col + 1 < nCols and check_infectable(grid, row, col + 1):
+                grid[row][col + 1] = INFECTED
                 frontier.append([row, col + 1])
         
         if frontier:
-            infected_q = deque(frontier)
+            infected_q = frontier
             round += 1
         else:
             break
+
     energy = 0
     for row in range(nRows):
         for col in range(nCols):
             if grid[row][col] == HEALTHY:
                 round = -1
-                
     
     return infected_time, round
 
 def part_3(grid, interestedIndividuals):
-    grid = copy.deepcopy(grid)
+    grid = [x[:] for x in grid]
     nRows = len(grid)
     nCols = len(grid[0])
 
@@ -114,38 +117,52 @@ def part_3(grid, interestedIndividuals):
                 infected_q.append([row, col])
 
     while True:
-        frontier = []
+        frontier = deque()
+        print("part 3 round ", round)
+        print("queue", infected_q)
+   
         while infected_q:
             [row, col] = infected_q.popleft()
             grid[row][col] = INFECTED
 
+
+            
             if row - 1 >= 0 and check_infectable(grid, row - 1, col):
+                grid[row - 1][col] = INFECTED
                 frontier.append([row - 1, col])
             
             if row + 1 < nRows and check_infectable(grid, row + 1, col):
+                grid[row + 1][col] = INFECTED
                 frontier.append([row + 1, col])
             
             if col - 1 >= 0 and check_infectable(grid, row, col - 1):
+                grid[row][col - 1] = INFECTED
                 frontier.append([row, col - 1])
             
             if col + 1 < nCols and check_infectable(grid, row, col + 1):
+                grid[row][col + 1] = INFECTED
                 frontier.append([row, col + 1])
             
             if row - 1 >= 0 and col - 1 >= 0 and check_infectable(grid, row - 1, col - 1):
+                grid[row - 1][col - 1] = INFECTED
                 frontier.append([row - 1, col - 1])
             
             if row - 1 >= 0 and col + 1 < nCols and check_infectable(grid, row - 1, col + 1):
+                grid[row - 1][col + 1] = INFECTED
                 frontier.append([row - 1 , col + 1])
 
             if row + 1 < nRows and col - 1 >= 0 and check_infectable(grid, row + 1, col - 1):
+                grid[row + 1][col - 1] = INFECTED
                 frontier.append([row + 1, col - 1])
             
             if row + 1 < nRows and col + 1 < nCols and check_infectable(grid, row + 1, col + 1):
+                grid[row + 1][col + 1] = INFECTED
                 frontier.append([row + 1, col + 1])
         
         if frontier:
-            infected_q = deque(frontier)
+            infected_q = frontier
             round += 1
+            
         else:
             break
         
