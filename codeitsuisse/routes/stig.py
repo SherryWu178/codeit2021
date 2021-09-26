@@ -102,6 +102,7 @@ def evaluate_stig():
     for subtask in data:
         qns = subtask["questions"]
         database = []
+        MAX_RATING = subtask["maxRating"]
         database.append([[1, MAX_RATING]])
         for qn_str in qns:
             new_data = []
@@ -113,7 +114,7 @@ def evaluate_stig():
                     a,b = compare_and_update(data, qn)
                 else:
                     continue
-
+                
                 if a == []:
                     a.pop(i)
                 else:
