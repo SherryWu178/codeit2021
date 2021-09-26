@@ -104,8 +104,9 @@ def evaluate_stig():
         database = []
         database.append([[1, MAX_RATING]])
         print(qns[0])
-        for qn_str in qns[0]:
+        for qn_str in qns:
             new_data = []
+            qn_str = qn_str[0]
             for i in range(len(database)):
                 data = database[i]
                 qn = [qn_str["from"], qn_str["to"]]
@@ -123,7 +124,7 @@ def evaluate_stig():
                     a.pop(i)
                 else:
                     database[i] = a
-                    
+
                 if b:
                     database.append(b)
                 
