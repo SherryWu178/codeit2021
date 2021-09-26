@@ -103,7 +103,6 @@ def evaluate_stig():
         qns = subtask["questions"]
         database = []
         database.append([[1, MAX_RATING]])
-        print(qns[0])
         for qn_str in qns:
             new_data = []
             qn_str = qn_str[0]
@@ -111,12 +110,7 @@ def evaluate_stig():
                 data = database[i]
                 qn = [qn_str["from"], qn_str["to"]]
                 if compare_and_update(data, qn):
-                    print("meaningful split")
-                    print(data)
-                    print(qn)
                     a,b = compare_and_update(data, qn)
-                    print("a ", a)
-                    print("b ", b)
                 else:
                     continue
 
@@ -126,9 +120,7 @@ def evaluate_stig():
                     database[i] = a
 
                 if b:
-                    database.append(b)
-                
-                print(database)
+                    database.append(b)     
         database = list(filter(lambda a: a != [], database))
         length = len(database)
         p,q = reduceFraction(length, MAX_RATING)
